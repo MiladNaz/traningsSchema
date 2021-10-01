@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tränings Schema</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div id="schedule">
+    <div class="month">
+        <ul>
+            <li class="prev">
+                <button class="week-buttons" v-on:click="changeWeekNumberDown"> &#10094;</button>
+            </li>
+            <li class="next">
+                <button class="week-buttons" v-on:click="changeWeekNumberUp"> &#10095;</button>
+            </li>
+            <li>
+                {{week}}<br>
+            </li>
+        </ul>
+        <button class="activity-button" onclick="document.getElementById('addEvent').style.display = 'block'">Add activity</button>
+    </div>
+    <div class="schedule-container">
+        <ul class="schedule-item" v-bind:id="days" v-for="days in weekdays">
+            <h3>{{days}}</h3>
+            <li class="test" v-bind:id="time" v-for="time in timeFrame" v-on:click="">
+                <p v-if="days == 'Time'">{{time}}</p>
+                <activity-item class="activity-item-style"
+                               v-if="activity.day == days && activity.time == time"
+                               is="activity-item"
+                               v-for="(activity, index) in activities"
+                               v-bind:key="activity.id"
+                               v-bind:title="activity.title"
+                               v-bind:time="activity.time"
+                               v-bind:day="activity.day"
+                               v-on:remove="activities.splice(index, 1)"
+                ></activity-item>
+            </li>
+        </ul>
+    </div>
+
+    <div id="addEvent" class="modal">
+        <form>
+            <div class="addEvent">
+
+                <input type="text" v-model="newActivityName" placeholder="Type in activity">
+                <select v-model="newDay">
+                    <option v-bind:id="days" v-for="days in weekdays" v-if="days != 'Time'">{{days}}</option>
+                </select>
+                <select v-model="newTime">
+                    <option v-bind:id="time" v-for="time in timeFrame">{{time}}</option>
+                </select>
+                <button type="button" v-on:click="addNewActivity">OK</button>
+
+                <!--Stänger av popup-->
+                <button type="button" onclick="document.getElementById('addEvent').style.display='none'">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
